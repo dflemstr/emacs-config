@@ -1,0 +1,21 @@
+#+TITLE: Text module
+
+* Text
+** Packages
+
+   Install text packages.
+
+   #+begin_src emacs-lisp
+     (add-to-list 'el-get-packages 'autopair)
+   #+end_src
+
+** Autopair
+
+   Match parens and quotes.
+
+   #+begin_src emacs-lisp
+     (do-after-init 'autopair
+       (lambda ()
+         (autopair-global-mode)
+         (setq autopair-autowrap t)))
+   #+end_src

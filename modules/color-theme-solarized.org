@@ -1,0 +1,32 @@
+#+TITLE: Color theme Solarized module
+
+* Color theme Solarized
+** Packages
+
+   Add the Solarized packages
+
+   #+begin_src emacs-lisp
+     ;;(add-to-list 'el-get-sources
+     ;;  '(:name color-theme-solarized
+     ;;    :url "https://github.com/dflemstr/emacs-color-theme-solarized.git"))
+     (add-to-list 'el-get-packages 'color-theme-solarized)
+   #+end_src
+
+** Color support
+
+   Set Solarized color options.
+
+   #+begin_src emacs-lisp
+     (setq solarized-termcolors 256)
+     (global-set-key (kbd "C-c l") 'color-theme-solarized)
+   #+end_src
+
+** Activation
+
+   Activate the color theme.
+
+   #+begin_src emacs-lisp
+     (do-after-init 'color-theme-solarized
+       (lambda ()
+         (color-theme-solarized 'dark)))
+   #+end_src

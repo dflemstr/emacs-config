@@ -1,0 +1,28 @@
+#+TITLE: Haskell module
+
+* Haskell
+** Packages
+
+   Add the Haskell mode packages.
+
+   #+begin_src emacs-lisp
+     (add-to-list 'elpa-packages 'haskell-mode)
+   #+end_src
+
+** Font locking
+
+   Make Haskell code look nicer.
+
+   #+begin_src emacs-lisp
+     (setq haskell-font-lock-symbols t)
+   #+end_src
+
+** Extra features
+
+   Add some extra haskell-mode features.
+
+   #+begin_src emacs-lisp
+     (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+     (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+     (add-hook 'haskell-mode-hook 'esk-prog-mode-hook)
+   #+end_src

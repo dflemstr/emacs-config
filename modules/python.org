@@ -1,0 +1,44 @@
+#+TITLE: Python module
+
+* Python
+** Packages
+
+   Add Python mode packages.
+
+   #+begin_src emacs-lisp
+     (add-to-list 'el-get-sources
+       '(:name cython-mode
+         :description "Major mode for editing Cython"
+         :type http
+         :url "https://bitbucket.org/birkenfeld/cython/raw/default/Tools/cython-mode.el"))
+
+     (add-to-list 'elpa-packages 'python-mode)
+     (add-to-list 'el-get-packages 'cython-mode)
+   #+end_src
+
+** python-mode
+
+   Replace the Python mode that comes with Emacs by the Python mode
+   supplied by the Python distribution itself.
+
+   #+begin_src emacs-lisp
+     (do-after-init 'python-mode
+       (lambda ()
+         (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+         (add-to-list 'interpreter-mode-alist '("python" .
+       python-mode))))
+
+     (add-hook 'python-mode-hook 'esk-prog-mode-hook)
+   #+end_src
+
+** cython-mode
+
+   #+begin_src emacs-lisp
+     (do-after-init 'cython-mode
+       (lambda ()
+         (add-to-list 'auto-mode-alist '("\\.pyx\\'" . cython-mode))
+         (add-to-list 'auto-mode-alist '("\\.pxd\\'" . cython-mode))
+         (add-to-list 'auto-mode-alist '("\\.pxi\\'" . cython-mode))))
+
+     (add-hook 'cython-mode-hook 'esk-prog-mode-hook)
+   #+end_src

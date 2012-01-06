@@ -1,0 +1,43 @@
+#+TITLE: Fonts module
+
+* Fonts
+** Manipulation
+
+   Check if a font is available.
+
+   #+begin_src emacs-lisp
+     (defun font-existsp (font)
+       "Check to see if the named FONT is available."
+        (if (null (x-list-fonts font))
+           nil t))
+   #+end_src
+
+   Choose first available font.
+
+   #+begin_src emacs-lisp
+     (require 'cl)
+     (defun font-avail (fonts)
+       "Finds the available fonts."
+       (remove-if-not 'font-existsp fonts))
+   #+end_src
+
+** Preference list
+
+   Create a list of font preferences.
+
+   #+begin_src emacs-lisp
+     (defvar font-preferences '())
+   #+end_src
+
+   Delay the font change by using a hook.
+
+   #+begin_src emacs-lisp
+     (defun font-pick-preference ()
+       (unless (eq window-system nil)
+         (let ((fonts (font-avail font-preferences)))
+           (unless (null fonts)
+             (set-face-attribute 'default nil :font
+               (car fonts))))))
+
+     (add-hook 'after-init-hook 'font-pick-preference)
+   #+end_src

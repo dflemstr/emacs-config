@@ -1,0 +1,29 @@
+#+TITLE: Markdown module
+
+* Markdown
+** Packages
+
+   Install markdown packages.
+
+   #+begin_src emacs-lisp
+     (add-to-list 'el-get-packages 'markdown-mode)
+   #+end_src
+
+** markdown-mode
+
+   Enable markdown-mode for some files.
+
+   #+begin_src emacs-lisp
+     (do-after-init 'markdown-mode
+       (lambda ()
+         (setq auto-mode-alist
+               (cons '("\\.Markdown" . markdown-mode) auto-mode-alist))
+         (setq auto-mode-alist
+               (cons '("\\.MarkDown" . markdown-mode) auto-mode-alist))
+         (setq auto-mode-alist
+               (cons '("\\.markdown" . markdown-mode) auto-mode-alist))
+         (setq auto-mode-alist
+               (cons '("\\.md" . markdown-mode) auto-mode-alist))))
+
+     (add-hook 'markdown-mode-hook 'esk-text-mode-hook)
+   #+end_src

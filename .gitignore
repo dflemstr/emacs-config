@@ -1,0 +1,31 @@
+
+.*
+!.git*
+*~
+\#*\#
+
+# Emacs files
+loaddefs.el*
+auto-save-list
+ac-comphist.dat
+custom.el
+places
+tramp
+
+# Emacs directories
+/backups/
+/thumbs/
+/oddmouse/
+/eshell/
+/image-dired/
+/elim/
+/doc/
+/themes/
+/url/
+/el-get/
+
+# Generated files
+/*.el
+!/init.el
+/modules/*.el
+

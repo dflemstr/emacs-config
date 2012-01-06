@@ -1,0 +1,15 @@
+#+TITLE: Starter kit module
+
+* Starter kit
+** Packages
+
+   Add the Starter kit packages.
+
+   #+begin_src emacs-lisp
+     (add-to-list 'elpa-packages 'starter-kit)
+     (add-to-list 'elpa-packages 'starter-kit-bindings)
+     (add-to-list 'elpa-packages 'starter-kit-eshell)
+     (add-to-list 'elpa-packages 'starter-kit-js)
+     (add-to-list 'elpa-packages 'starter-kit-lisp)
+     (add-to-list 'elpa-packages 'starter-kit-ruby)
+   #+end_src

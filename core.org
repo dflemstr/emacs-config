@@ -1,0 +1,177 @@
+#+TITLE: Emacs core config file
+
+* Core
+** Load files
+
+   Include the user's emacs directory in the load path.
+
+   #+begin_src emacs-lisp
+     (add-to-list 'load-path user-emacs-directory)
+   #+end_src
+
+   Specify the file for storing autoloads.
+
+   #+begin_src emacs-lisp
+     (setq autoload-file (concat user-emacs-directory "loaddefs.el"))
+   #+end_src
+
+   Specify the file for storing customizations.
+
+   #+begin_src emacs-lisp
+     (setq custom-file (concat user-emacs-directory "custom.el"))
+   #+end_src
+
+** Package management
+*** Backends
+**** Basic
+
+     The most basic installation system of them all: download the specified file
+     and execute it.
+
+     #+begin_src emacs-lisp
+       (defun eval-url (url)
+         "Downloads the specified .el file and executes it."
+         (with-current-buffer
+             (url-retrieve-synchronously url)
+           (end-of-buffer)
+           (eval-print-last-sexp)))
+     #+end_src
+
+**** ELPA
+
+     Add ELPA repositories.
+
+     #+begin_src emacs-lisp
+       (defvar package-archives '())
+       (add-to-list 'package-archives
+                    '("original"    . "http://tromey.com/elpa/"))
+       (add-to-list 'package-archives
+                    '("gnu"         . "http://elpa.gnu.org/packages/"))
+       (add-to-list 'package-archives
+                    '("marmalade"   . "http://marmalade-repo.org/packages/"))
+       (add-to-list 'package-archives
+                    '("technomancy" . "http://repo.technomancy.us/emacs/"))
+       (add-to-list 'package-archives
+                    '("kjhealy"     . "http://kieranhealy.org/packages/"))
+       (add-to-list 'package-archives
+                    '("josh"        . "http://josh.github.com/elpa/"))
+     #+end_src
+
+     Create a variable for packages that will be installed.
+
+     #+begin_src emacs-lisp
+       (defvar elpa-packages '())
+     #+end_src
+
+**** el-get
+
+     Create the el-get database.
+
+     #+begin_src emacs-lisp
+       (add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
+     #+end_src
+
+     Download el-get if we don't already have it.
+
+     #+begin_src emacs-lisp
+       (defun install-el-get ()
+         "Downloads and installs the el-get system"
+         (eval-url
+           "https://github.com/dimitri/el-get/raw/master/el-get-install.el"))
+
+       (unless (require 'el-get nil t)
+         (install-el-get))
+     #+end_src
+
+     Create a variable for packages that will be installed.
+
+     #+begin_src emacs-lisp
+       (defvar el-get-packages '())
+     #+end_src
+
+*** Installation
+
+    Delay the installation of packages using a hook.
+
+    #+begin_src emacs-lisp
+      (defun install-packages ()
+        (progn
+          (dolist (p elpa-packages)
+            (add-to-list 'el-get-sources
+              (list :name p :type 'elpa)))
+          (el-get 'sync (append elpa-packages el-get-packages))
+          (el-get)))
+
+      (add-hook 'after-init-hook 'install-packages)
+    #+end_src
+
+*** Initialization
+
+    Add some code to be run to the init hook of a package.
+
+    #+begin_src emacs-lisp
+      (defun sequence-actions (action1 action2)
+        (cond ((null action1) action2)
+              ((null action2) action1)
+              (t (lexical-let ((a1 action1) (a2 action2))
+                #'(lambda () (progn (funcall a1) (funcall a2)))))))
+
+      (defun el-get-def-add-or-init (name)
+        (let ((current-def (el-get-package-def name)))
+          (if (null current-def)
+              (list :name name)
+            current-def)))
+
+      (defun do-after-init (package new-action)
+        (let* ((definition (el-get-def-add-or-init package))
+               (old-action (plist-get definition :after)))
+          (setq
+           el-get-sources
+           (append
+            el-get-sources
+            (list
+             (plist-put
+              definition :after
+              (sequence-actions
+               old-action
+               new-action)))))))
+    #+end_src
+
+** Modules
+*** Loader
+
+    A function for loading module files.
+
+    #+begin_src emacs-lisp
+      (defun load-module (name)
+        "Loads the specified module from the module directory"
+        (let ((file (expand-file-name (format "modules/%s.org" name)
+                     user-emacs-directory)))
+          (org-babel-load-file file)))
+    #+end_src
+
+*** User customizations
+
+    Load a named core file.
+
+    #+begin_src emacs-lisp
+      (defun load-core-file (name)
+        (flet ((with-ext (ext)
+                (expand-file-name (concat name "-core" ext)
+                 user-emacs-directory)))
+           (let ((core-el (with-ext ".el"))
+                 (core-org (with-ext ".org")))
+             (cond
+               ((file-exists-p core-org)
+                 (org-babel-load-file core-org))
+               ((file-exists-p core-el)
+                 (load core-el))))))
+    #+end_src
+
+    Allow system/user specific core customization files (à la
+    starter-kit).
+
+    #+begin_src emacs-lisp
+      (load-core-file system-name)
+      (load-core-file user-login-name)
+    #+end_src

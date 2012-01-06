@@ -1,0 +1,8 @@
+#+TITLE: HL-line module
+
+* HL-line
+** Global mode
+
+   #+begin_src emacs-lisp
+     (global-hl-line-mode)
+   #+end_src

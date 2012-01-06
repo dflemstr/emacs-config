@@ -1,0 +1,28 @@
+#+TITLE: Org module
+
+* Org
+** Language support
+
+   #+begin_src emacs-lisp
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((C . t)
+        (clojure . t)
+        (css . t)
+        (dot . t)
+        (emacs-lisp . t)
+        (haskell . t)
+        (java . t)
+        (js . t)
+        (latex . t)
+        (lisp . t)
+        (perl . t)
+        (python . t)
+        (R . t)
+        (ruby . t)
+        (scheme . t)
+        (sh . t)
+        (sql . t)))
+     (setq org-src-fontify-natively t)
+     (setq org-src-tab-acts-natively t)
+   #+end_src
