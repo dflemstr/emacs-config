@@ -1,0 +1,8 @@
+#+TITLE: Initialization for "david"
+
+* Initialization
+** Core files
+
+   #+begin_src emacs-lisp
+     (load-core-file "dflemstr")
+   #+end_src

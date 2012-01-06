@@ -1,0 +1,37 @@
+#+TITLE: Initialization for "dflemstr"
+
+* Initialization
+** Modules
+
+   Load modules.
+
+   #+begin_src emacs-lisp
+     (load-module "server")
+     (load-module "starter-kit")
+
+     (load-module "color-theme-solarized")
+     (load-module "fonts")
+     (load-module "haskell")
+     (load-module "hl-line")
+     (load-module "latex")
+     (load-module "markdown")
+     (load-module "org")
+     (load-module "python")
+     (load-module "text")
+     (load-module "whitespace")
+   #+end_src
+
+** Font list
+
+   A list of font preferences
+
+   #+begin_src emacs-lisp
+     (setq font-preferences
+       '("PragmataPro"
+         "Inconsolata"
+         "DejaVu Sans Mono"
+         "Bitstream Vera Sans Mono"
+         "Anonymous Pro"
+         "Menlo"
+         "Consolas"))
+   #+end_src
