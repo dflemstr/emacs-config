@@ -60,18 +60,26 @@
    This workaround disables whitespace while the popup is shown.
 
    #+begin_src emacs-lisp
+     (defvar popup-whitespace-mode nil)
+     (defvar popup-global-whitespace-mode nil)
      (eval-after-load 'popup
-       (lambda ()
-         (setq popup-num-open 0)
-         (defadvice popup-create (before temp-disable-whitespace activate)
+       '(progn
+          (defadvice popup-create (before popup-disable-whitespace activate)
             "Disable whitespace while showing a menu"
-              (progn
-                (when (= popup-num-open 0) (whitespace-mode 0))
-                (setq popup-num-open (+ popup-num-open 1))))
-
-         (defadvice popup-delete (after temp-enable-whitespace activate)
-           "Enable whitespace after having shown a menu"
-           (progn
-             (setq popup-num-open (- popup-num-open 1))
-             (when (= popup-num-open 0) (whitespace-mode 1))))))
+            (when (null popup-instances)
+              (when whitespace-mode
+                (whitespace-mode -1)
+                (setq popup-whitespace-mode t))
+              (when global-whitespace-mode
+                (global-whitespace-mode -1)
+                (setq popup-global-whitespace-mode t))))
+          (defadvice popup-delete (after popup-enable-whitespace activate)
+            "Enable whitespace after having shown a menu"
+            (when (null popup-instances)
+              (when popup-whitespace-mode
+                (whitespace-mode)
+                (setq popup-whitespace-mode nil))
+              (when popup-global-whitespace-mode
+                (global-whitespace-mode)
+                (setq popup-global-whitespace-mode nil))))))
    #+end_src
