@@ -11,6 +11,7 @@
 
      (load-module "color-theme-solarized")
      (load-module "fonts")
+     (load-module "fullscreen")
      (load-module "haskell")
      (load-module "hl-line")
      (load-module "latex")
