@@ -1,0 +1,21 @@
+#+TITLE: Fullscreen module
+
+* Fullscreen
+** Mechanism
+
+   #+begin_src emacs-lisp
+     (defun toggle-fullscreen (&optional f)
+       (interactive)
+       (let ((current-value (frame-parameter nil 'fullscreen)))
+         (set-frame-parameter nil 'fullscreen
+           (if (equal 'fullboth current-value)
+               (if (boundp 'old-fullscreen) old-fullscreen nil)
+                   (progn (setq old-fullscreen current-value)
+                          'fullboth)))))
+   #+end_src
+
+** Bind key
+
+   #+begin_src emacs-lisp
+     (global-set-key [f11] 'toggle-fullscreen)
+   #+end_src
